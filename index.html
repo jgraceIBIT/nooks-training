@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Working in Nooks — In Balance IT Solutions</title>
+
+<!--
+  ============================================================
+  NOOKS LINK CONFIG
+  ============================================================
+  The "Open in Nooks" buttons read from the NOOKS_LINKS object
+  in the <script> at the bottom of this file. They are wired to
+  our live workspace pages. To change one, edit that block.
+
+  This file is fully self-contained — safe to host on GitHub
+  Pages as-is, no build step and no external dependencies
+  beyond the Google Fonts link in the head.
+  ============================================================
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&amp;family=Inter+Tight:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg:            #ffffff;
+    --bg-soft:       #f5f6f6;
+    --bg-softer:     #eceef0;
+    --bg-sink:       #e4e7ea;
+    --ink:           #1b2227;
+    --ink-soft:      #51606b;
+    --ink-faint:     #8a97a1;
+    --line:          rgba(27,34,39,0.12);
+    --line-strong:   rgba(27,34,39,0.22);
+
+    /* In Balance accent: a balanced teal, with a warning amber for traps */
+    --accent:        #0e7c86;
+    --accent-deep:   #0a5a62;
+    --accent-wash:   #e2f1f2;
+    --warn:          #b4680e;
+    --warn-wash:     #fbf0df;
+    --good:          #2f7d4f;
+    --good-wash:     #e4f2ea;
+
+    --radius:        10px;
+    --radius-lg:     16px;
+    --display: 'Fraunces', Georgia, 'Times New Roman', serif;
+    --body: 'Inter Tight', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:          #14181b;
+      --bg-soft:     #1c2226;
+      --bg-softer:   #232b30;
+      --bg-sink:     #2b343a;
+      --ink:         #e9edf0;
+      --ink-soft:    #aab6bf;
+      --ink-faint:   #76838d;
+      --line:        rgba(255,255,255,0.12);
+      --line-strong: rgba(255,255,255,0.22);
+      --accent:      #3fb4bd;
+      --accent-deep: #6fd0d7;
+      --accent-wash: #12343a;
+      --warn:        #e0a050;
+      --warn-wash:   #3a2d16;
+      --good:        #6fc290;
+      --good-wash:   #16301f;
+    }
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; scroll-padding-top: 84px; }
+
+  body {
+    font-family: var(--body);
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---------- Top nav ---------- */
+  .topbar {
+    position: sticky; top: 0; z-index: 50;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: saturate(140%) blur(10px);
+    border-bottom: 0.5px solid var(--line);
+  }
+  .topbar-inner {
+    max-width: 1060px; margin: 0 auto;
+    display: flex; align-items: center; gap: 1rem;
+    padding: 0.7rem 1.25rem;
+  }
+  .brand { display: flex; align-items: center; gap: 0.6rem; font-weight: 600; letter-spacing: -0.01em; }
+  .brand .mark {
+    width: 26px; height: 26px; flex: none; position: relative;
+  }
+  .brand .mark svg { display:block; width:100%; height:100%; }
+  .brand small { display:block; font-weight:500; font-size: 10.5px; color: var(--ink-faint); letter-spacing: 0.02em; text-transform: uppercase; margin-top: -2px;}
+  .nav-scroll { margin-left: auto; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .nav { display: flex; gap: 0.15rem; white-space: nowrap; }
+  .nav a {
+    font-size: 13px; font-weight: 500; color: var(--ink-soft);
+    text-decoration: none; padding: 0.35rem 0.6rem; border-radius: 7px;
+    display: inline-flex; align-items: center; gap: 0.4rem;
+  }
+  .nav a .n { color: var(--accent); font-weight: 700; font-variant-numeric: tabular-nums; }
+  .nav a:hover { background: var(--bg-soft); color: var(--ink); }
+  .nav a.active { background: var(--accent-wash); color: var(--accent-deep); }
+  @media (max-width: 720px) { .brand small { display:none; } }
+
+  main { max-width: 1060px; margin: 0 auto; padding: 0 1.25rem 5rem; }
+
+  /* ---------- Hero ---------- */
+  .hero { padding: 3.2rem 0 1.5rem; border-bottom: 0.5px solid var(--line); }
+  .kicker {
+    font-size: 12px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 0.9rem;
+  }
+  .hero h1 {
+    font-family: var(--display); font-weight: 500; letter-spacing: -0.02em;
+    font-size: clamp(30px, 5vw, 46px); line-height: 1.06; margin-bottom: 1rem;
+    max-width: 18ch;
+  }
+  .hero .lede { font-size: 17px; color: var(--ink-soft); max-width: 60ch; }
+  .hero .lede strong { color: var(--ink); font-weight: 600; }
+
+  /* ---------- The loop ---------- */
+  .loop {
+    margin: 2rem 0 0.5rem; padding: 1.5rem;
+    background: var(--bg-soft); border: 0.5px solid var(--line);
+    border-radius: var(--radius-lg);
+  }
+  .loop h2 { font-family: var(--display); font-weight: 500; font-size: 20px; margin-bottom: 0.3rem; }
+  .loop p.sub { color: var(--ink-soft); font-size: 14.5px; margin-bottom: 1.3rem; max-width: 70ch; }
+  .loop-row { display: flex; flex-wrap: wrap; align-items: stretch; gap: 0.5rem; }
+  .loop-step {
+    flex: 1 1 150px; background: var(--bg); border: 0.5px solid var(--line);
+    border-radius: var(--radius); padding: 0.85rem 0.9rem; position: relative;
+  }
+  .loop-step .ls-num {
+    font-family: var(--display); font-size: 13px; color: var(--accent); font-weight: 600;
+  }
+  .loop-step h4 { font-size: 14px; font-weight: 600; margin: 0.15rem 0 0.25rem; letter-spacing: -0.01em; }
+  .loop-step p { font-size: 12.5px; color: var(--ink-soft); line-height: 1.5; }
+  .loop-arrow { align-self: center; color: var(--ink-faint); flex: none; display:flex; }
+  @media (max-width: 760px) { .loop-arrow { transform: rotate(90deg); } .loop-step { flex-basis: 100%; } }
+
+  /* ---------- Module sections ---------- */
+  .module { padding-top: 2.6rem; }
+  .module-head { display: flex; align-items: baseline; gap: 0.9rem; margin-bottom: 0.4rem; }
+  .module-num {
+    font-family: var(--display); font-weight: 600; font-size: 34px; color: var(--accent);
+    line-height: 1; flex: none;
+  }
+  .module-head h2 {
+    font-family: var(--display); font-weight: 500; letter-spacing: -0.015em;
+    font-size: clamp(22px, 3vw, 28px); line-height: 1.1;
+  }
+  .module-sit {
+    color: var(--ink-soft); font-size: 15px; margin: 0.1rem 0 1.3rem 0;
+    padding-left: calc(34px + 0.9rem); max-width: 72ch;
+  }
+  @media (max-width: 560px){ .module-sit { padding-left: 0; } }
+
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: start; }
+  @media (max-width: 820px) { .grid { grid-template-columns: 1fr; } }
+
+  .card {
+    background: var(--bg-soft); border: 0.5px solid var(--line);
+    border-radius: var(--radius-lg); padding: 1.3rem 1.4rem;
+  }
+  .card .label {
+    font-size: 11.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--ink-faint); margin-bottom: 0.7rem; display:flex; align-items:center; gap: 0.45rem;
+  }
+  .card .label svg { color: var(--accent); }
+
+  /* the rule card — the judgment payload */
+  .rule {
+    background: var(--accent-wash);
+    border: 0.5px solid color-mix(in srgb, var(--accent) 35%, transparent);
+    grid-column: 1 / -1;
+  }
+  .rule .label { color: var(--accent-deep); }
+  .rule .label svg { color: var(--accent-deep); }
+  .rule p.big {
+    font-family: var(--display); font-weight: 500; font-size: 19px; line-height: 1.4;
+    color: var(--ink); letter-spacing: -0.01em;
+  }
+  .rule p.big em { font-style: italic; color: var(--accent-deep); }
+
+  /* steps */
+  ol.steps { list-style: none; counter-reset: s; }
+  ol.steps li {
+    counter-increment: s; position: relative; padding-left: 2rem;
+    margin-bottom: 0.7rem; font-size: 14.5px;
+  }
+  ol.steps li::before {
+    content: counter(s); position: absolute; left: 0; top: 0.05rem;
+    width: 1.35rem; height: 1.35rem; border-radius: 50%;
+    background: var(--accent); color: #fff; font-size: 11.5px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center; font-variant-numeric: tabular-nums;
+  }
+  ol.steps li b { font-weight: 600; }
+  ol.steps li .pill { font-weight: 600; color: var(--accent-deep); }
+
+  ul.plain { list-style: none; }
+  ul.plain li { position: relative; padding-left: 1.2rem; margin-bottom: 0.5rem; font-size: 14.5px; }
+  ul.plain li::before {
+    content: ""; position: absolute; left: 0; top: 0.62rem;
+    width: 5px; height: 5px; border-radius: 50%; background: var(--accent);
+  }
+
+  /* trap callout */
+  .trap {
+    grid-column: 1 / -1;
+    background: var(--warn-wash);
+    border: 0.5px solid color-mix(in srgb, var(--warn) 40%, transparent);
+    border-left: 3px solid var(--warn);
+    border-radius: var(--radius);
+    padding: 1.1rem 1.3rem; margin-top: 0.2rem;
+  }
+  .trap .label { color: var(--warn); }
+  .trap .label svg { color: var(--warn); }
+  .trap p { font-size: 14.5px; }
+  .trap p strong { font-weight: 600; }
+  .trap p + p { margin-top: 0.5rem; }
+
+  /* link row */
+  .links { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.3rem; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font-size: 13.5px; font-weight: 600; text-decoration: none;
+    padding: 0.55rem 0.95rem; border-radius: 8px; border: 0.5px solid var(--line-strong);
+    color: var(--ink); background: var(--bg); cursor: pointer;
+  }
+  .btn:hover { border-color: var(--accent); color: var(--accent-deep); }
+  .btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .btn.primary:hover { background: var(--accent-deep); color: #fff; }
+  .btn svg { flex: none; }
+  .btn.ghost { background: transparent; }
+
+  /* interactive path chooser (item 1) — bonus layer, degrades fine */
+  .chooser { grid-column: 1 / -1; margin-top: 0.3rem; }
+  .chooser .ch-q { font-size: 13px; font-weight: 600; color: var(--ink-soft); margin-bottom: 0.6rem; }
+  .ch-opts { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.9rem; }
+  .ch-opt {
+    font-size: 13.5px; font-weight: 500; padding: 0.5rem 0.9rem;
+    border: 0.5px solid var(--line-strong); border-radius: 20px; background: var(--bg);
+    cursor: pointer; color: var(--ink);
+  }
+  .ch-opt[aria-pressed="true"] { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .ch-answer {
+    font-size: 14.5px; padding: 0.9rem 1.1rem; border-radius: var(--radius);
+    background: var(--bg); border: 0.5px solid var(--line); min-height: 1px;
+  }
+  .ch-answer strong { color: var(--accent-deep); }
+  .ch-answer.empty { color: var(--ink-faint); font-style: italic; }
+
+  /* generic callout */
+  .note {
+    grid-column: 1/-1; font-size: 13.5px; color: var(--ink-soft);
+    border-left: 2px solid var(--line-strong); padding: 0.1rem 0 0.1rem 0.9rem; margin-top: 0.2rem;
+  }
+
+  .divider { height: 0.5px; background: var(--line); margin: 3rem 0 0; }
+
+  /* footer */
+  footer { padding-top: 2.4rem; color: var(--ink-faint); font-size: 12.5px; }
+  footer a { color: var(--accent); text-decoration: none; }
+
+  /* config banner (only shows if links unset — purely informational) */
+  .cfg {
+    margin-top: 1.2rem; font-size: 12.5px; color: var(--ink-soft);
+    background: var(--bg-soft); border: 0.5px dashed var(--line-strong);
+    border-radius: var(--radius); padding: 0.8rem 1rem;
+  }
+  .cfg code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11.5px; color: var(--accent-deep); }
+
+  .reveal { opacity: 1; }
+</style>
+</head>
+<body>
+
+<!-- =================== TOP NAV =================== -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <span class="mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32" fill="none">
+          <circle cx="16" cy="16" r="15" stroke="var(--accent)" stroke-width="1.5"></circle>
+          <path d="M16 5v22" stroke="var(--accent)" stroke-width="1.5"></path>
+          <path d="M8.5 12.5h15" stroke="var(--accent)" stroke-width="1.5"></path>
+          <circle cx="10.5" cy="12.5" r="3.2" stroke="var(--accent-deep)" stroke-width="1.3" fill="var(--accent-wash)"></circle>
+          <circle cx="21.5" cy="12.5" r="3.2" stroke="var(--accent-deep)" stroke-width="1.3" fill="var(--accent-wash)"></circle>
+        </svg>
+      </span>
+      <span>Working in Nooks<small>In Balance IT Solutions</small></span>
+    </div>
+    <div class="nav-scroll">
+      <nav class="nav" id="nav">
+        <a href="#start"><span class="n">★</span>Start here</a>
+        <a href="#m1"><span class="n">1</span>Calls</a>
+        <a href="#m2"><span class="n">2</span>Load contacts</a>
+        <a href="#m3"><span class="n">3</span>Email</a>
+        <a href="#m4"><span class="n">4</span>Tasks</a>
+        <a href="#m5"><span class="n">5</span>AI coaching</a>
+        <a href="#m6"><span class="n">6</span>AI target lists</a>
+      </nav>
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <!-- =================== HERO =================== -->
+  <section class="hero" id="start">
+    <p class="kicker">Rep enablement · self-guided</p>
+    <h1>Nooks tells you who to call and why. Your job is to work the system, not fight it.</h1>
+    <p class="lede">Most of the friction with Nooks comes from one thing: there are several ways to do the same action, and it isn't obvious which one to use. This guide fixes that. For each task you'll get <strong>the one rule that matters</strong>, the quick steps, and the <strong>trap that quietly breaks things</strong> — plus a link to go see it for yourself in Nooks.</p>
+
+    <!-- THE LOOP -->
+    <div class="loop">
+      <h2>The whole tool is one loop</h2>
+      <p class="sub">Every feature below is a link in the same chain. When you see how they connect, Nooks stops being a pile of buttons and starts being a system that hands you your day.</p>
+      <div class="loop-row">
+        <div class="loop-step">
+          <div class="ls-num">01</div>
+          <h4>A signal fires</h4>
+          <p>An account lights up with a "why now" — a VMware renewal, a SOC stack, new leadership.</p>
+        </div>
+        <div class="loop-arrow" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+        <div class="loop-step">
+          <div class="ls-num">02</div>
+          <h4>AI finds the people</h4>
+          <p>The Accounts page surfaces the right contacts at that account — including ones not yet in Salesforce.</p>
+        </div>
+        <div class="loop-arrow" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+        <div class="loop-step">
+          <div class="ls-num">03</div>
+          <h4>Into the play</h4>
+          <p>You add them to the sequence that matches the signal. The sequence builds your touches.</p>
+        </div>
+        <div class="loop-arrow" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+        <div class="loop-step">
+          <div class="ls-num">04</div>
+          <h4>You work the tasks</h4>
+          <p>Calls, emails, LinkedIn show up in your queue. You do them in Nooks — and the system learns.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================== MODULE 1 — CALLS =================== -->
+  <section class="module" id="m1">
+    <div class="module-head"><span class="module-num">1</span><h2>Making &amp; logging a call</h2></div>
+    <p class="module-sit">You can call from the Dialer, from your Tasks page, or as a one-off. They feel like different tools. They're not.</p>
+
+    <div class="grid">
+      <div class="card rule">
+        <div class="label"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 2v20M2 12h20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path></svg>The one rule</div>
+        <p class="big">The paths aren't different ways to <em>call</em> — they're different ways to pick <em>who's next</em>. The call window, the dispositions, the logging back to Salesforce: identical everywhere. So choose the path by your situation, and stop worrying you're using the "wrong" one.</p>
+      </div>
+
+      <div class="card chooser">
+        <div class="label">Which path should I use?</div>
+        <div class="ch-q">Pick your situation:</div>
+        <div class="ch-opts" role="group" aria-label="calling situation">
+          <button class="ch-opt" data-ans="list">I want to burn through my calls</button>
+          <button class="ch-opt" data-ans="one">I want to think about each person</button>
+          <button class="ch-opt" data-ans="now">I need to call one specific person now</button>
+        </div>
+        <div class="ch-answer empty" id="ch1" aria-live="polite">Choose a situation above to see the right path.</div>
+      </div>
+
+      <div class="card">
+        <div class="label">The three paths</div>
+        <ul class="plain">
+          <li><b>Dialer</b> — volume. Load your due call tasks and power through them. This is the engine.</li>
+          <li><b>Tasks page → Start Tasks</b> — one at a time, so you can read each prospect first. Mixes calls, emails, LinkedIn.</li>
+          <li><b>One-off dial</b> — calling someone <em>right now</em> who has no due task (a callback, a referral).</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="label">Every call, same finish</div>
+        <ol class="steps">
+          <li>Pick the number, click the <b>phone button</b>, have the conversation.</li>
+          <li>Set a <b>disposition</b> — it <b>auto-saves</b>, no save button.</li>
+          <li>Hit <b>Log</b>. That's what saves the call to Nooks and Salesforce.</li>
+        </ol>
+      </div>
+
+      <div class="trap">
+        <div class="label"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>The traps</div>
+        <p><strong>A one-off call does NOT advance a sequence.</strong> If you "already called" someone through a one-off, their sequence task is still sitting open — and you'll think the queue is broken. Working your sequence? Call from the <b>Dialer</b> or <b>Tasks page</b>, not a one-off.</p>
+        <p><strong>Always log the call.</strong> If you close the call window without logging, the call is gone — not saved to Nooks or Salesforce — and you can't undo a log once it's done.</p>
+      </div>
+
+      <div class="links">
+        <a class="btn primary nk" data-link="dialer" href="#" target="_blank" rel="noopener">Open the Dialer in Nooks<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M7 17 17 7M8 7h9v9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></a>
+        <a class="btn" href="https://support.nooks.ai/articles/6922345119-executing-call-tasks-from-the-tasks-page" target="_blank" rel="noopener">Learn more: working call tasks</a>
+        <a class="btn ghost" href="https://support.nooks.ai/articles/7937491961-making-one-off-dials-with-nooks" target="_blank" rel="noopener">Learn more: one-off dials</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- =================== MODULE 2 — LOAD CONTACTS =================== -->
+  <section class="module" id="m2">
+    <div class="module-head"><span class="module-num">2</span><h2>Loading contacts into a sequence</h2></div>
+    <p class="module-sit">This is how a person becomes work in your queue. It's quick — the only thing to get right is <em>which</em> sequence.</p>
+
+    <div class="grid">
+      <div class="card rule">
+        <div class="label"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 2v20M2 12h20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path></svg>The one rule</div>
+        <p class="big">Match the sequence to the account's <em>signal</em>. The "why now" that lit the account up tells you which play to run — don't pick a sequence by habit.</p>
+      </div>
+
+      <div class="card">
+        <div class="label">Steps</div>
+        <ol class="steps">
+          <li>Select the prospect (Prospects list or the account's Prospects tab).</li>
+          <li>Click <b>Add to sequence</b>.</li>
+          <li>Pick the <b>play that matches the signal</b> and confirm.</li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <div class="label">Our five plays</div>
+        <ul class="plain">
+          <li><b>VMware Freedom</b> — VMware / Broadcom stack, renewal cost pressure.</li>
+          <li><b>Shadow AI Security</b> — unsanctioned employee AI use.</li>
+          <li><b>Agentic Security &amp; Guardrails</b> — securing the AI agents they deploy.</li>
+          <li><b>Agentic SOC</b> — running / augmenting their SOC.</li>
+          <li><b>Ransomware Recovery</b> — tested-recovery readiness.</li>
+        </ul>
+      </div>
+
+      <div class="trap">
+        <div class="label"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>The trap</div>
+        <p><strong>A "NEW" prospect has to be added to the CRM first.</strong> People Nooks discovered but who aren't in Salesforce yet are tagged NEW — select them and <b>Add to CRM</b> before you can sequence them. (You don't build your own sequences; you enroll into the five plays above.)</p>
+      </div>
+
+      <div class="links">
+        <a class="btn primary nk" data-link="accounts" href="#" target="_blank" rel="noopener">Open Accounts in Nooks<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M7 17 17 7M8 7h9v9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></a>
+        <a class="btn" href="https://nooks.help.usepylon.com/articles/3861010000-accounts-page" target="_blank" rel="noopener">Learn more: the Accounts page</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- =================== MODULE 3 — EMAIL =================== -->
+  <section class="module" id="m3">
+    <div class="module-head"><span class="module-num">3</span><h2>Sending an email</h2></div>
+    <p class="module-sit">Nooks logs email activity even if you type it in Outlook — so this feels safe to do anywhere. For sequence emails, it isn't. Here's the distinction.</p>
+
+    <div class="grid">
+      <div class="card rule">
+        <div class="label"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 2v20M2 12h20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path></svg>The one rule</div>
+        <p class="big">When a sequence gives you an email task, send it <em>from the task in Nooks</em>. That's the only thing that marks the step complete and moves the prospect forward. Same lesson as calling: <em>work the task in Nooks, or the sequence doesn't know you did anything.</em></p>
+      </div>
+
+      <div class="card">
+        <div class="label">Steps</div>
+        <ol class="steps">
+          <li>Open the email task from your <b>Tasks page</b>.</li>
+          <li>Review the drafted copy (edit if you want).</li>
+          <li><b>Send from the task</b> — the step completes and the sequence advances.</li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <div class="label">Why it matters</div>
+        <ul class="plain">
+          <li>Sending from the task is what <b>completes the step</b> and schedules the next touch.</li>
+          <li>Outlook import is a <b>safety net for one-off emails</b> outside a sequence — not a substitute for working the task.</li>
+          <li>Opens and clicks are tracked either way; <b>advancing the sequence is not</b>.</li>
+        </ul>
+      </div>
+
+      <div class="trap">
+        <div class="label"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>The trap — how sequences silently stall</div>
+        <p><strong>Seeing the email task, then sending "the same email" from Outlook by hand, leaves the task open.</strong> The activity may log, but the step never completes, the prospect never advances, and you get nagged by an "overdue" task you swear you finished. From the outside it looks like the tool is broken. It isn't — the email just didn't go through the task.</p>
+      </div>
+
+      <div class="links">
+        <a class="btn primary nk" data-link="tasks" href="#" target="_blank" rel="noopener">Open Tasks in Nooks<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M7 17 17 7M8 7h9v9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></a>
+        <a class="btn" href="https://support.nooks.ai/articles/6922345119-executing-call-tasks-from-the-tasks-page" target="_blank" rel="noopener">Learn more: working your tasks</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- =================== MODULE 4 — TASKS =================== -->
+  <section class="module" id="m4">
+    <div class="module-head"><span class="module-num">4</span><h2>Finding your tasks &amp; next steps</h2></div>
+    <p class="module-sit">Everything a sequence wants you to do lands in one place. The only thing reps misread is what "overdue" means.</p>
+
+    <div class="grid">
+      <div class="card rule">
+        <div class="label"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 2v20M2 12h20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path></svg>The one rule</div>
+        <p class="big">The Tasks page is your queue — calls, emails, LinkedIn, all of it, most-overdue first. And <em>overdue isn't broken</em>: it means a manual step is waiting on <em>you</em>. Nothing auto-advances past a step you haven't worked.</p>
+      </div>
+
+      <div class="card">
+        <div class="label">Where it lives</div>
+        <ul class="plain">
+          <li><b>Tasks</b> in the left nav = your full to-do list across every sequence.</li>
+          <li>Call tasks also show up <b>in the Dialer</b> so you can power through them.</li>
+          <li>Sorted <b>most-overdue first</b> — the top of the list is where to start.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="label">Three things you can do to a task</div>
+        <ul class="plain">
+          <li><b>Complete</b> it — you did the work; the sequence advances.</li>
+          <li><b>Skip</b> it — doesn't apply (e.g. LinkedIn message to someone who hasn't accepted). Keeps them in the sequence.</li>
+          <li><b>Reschedule</b> it — not today; push it out.</li>
+        </ul>
+      </div>
+
+      <div class="trap">
+        <div class="label"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>The trap</div>
+        <p><strong>A pile of overdue tasks doesn't mean something broke — it means manual steps are sitting unworked.</strong> Treat the queue as your day, not a nag. Work the top, Skip what doesn't apply, Reschedule the rest.</p>
+      </div>
+
+      <div class="links">
+        <a class="btn primary nk" data-link="tasks" href="#" target="_blank" rel="noopener">Open Tasks in Nooks<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M7 17 17 7M8 7h9v9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></a>
+        <a class="btn" href="https://support.nooks.ai/articles/6922345119-executing-call-tasks-from-the-tasks-page" target="_blank" rel="noopener">Learn more: the Tasks page</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- =================== MODULE 5 — AI COACHING =================== -->
+  <section class="module" id="m5">
+    <div class="module-head"><span class="module-num">5</span><h2>Using AI coaching</h2></div>
+    <p class="module-sit">Your calls get recorded and scored automatically. The win is simple: review your own before anyone else does.</p>
+
+    <div class="grid">
+      <div class="card rule">
+        <div class="label"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 2v20M2 12h20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path></svg>The one rule</div>
+        <p class="big">Every connected call is transcribed and scored for you. Go to the call, read the AI feedback, and fix one thing on the next dial. It's a free coaching rep on every call — <em>use your own before your manager does.</em></p>
+      </div>
+
+      <div class="card">
+        <div class="label">Steps</div>
+        <ol class="steps">
+          <li>Open the <b>Call Library</b> and find a recent connected call.</li>
+          <li>Read the <b>AI summary and scorecard</b> next to the transcript.</li>
+          <li>Pick <b>one</b> thing to do differently and try it on your next call.</li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <div class="label">What you get</div>
+        <ul class="plain">
+          <li>A searchable <b>transcript</b> of the conversation.</li>
+          <li>An <b>AI summary</b> of what happened and what was said.</li>
+          <li>A <b>scorecard</b> against what a good call looks like.</li>
+        </ul>
+      </div>
+
+      <div class="note">Short-and-sweet by design — the value here isn't the mechanics, it's the habit. One review, one adjustment, every day.</div>
+
+      <div class="links">
+        <a class="btn primary nk" data-link="coaching" href="#" target="_blank" rel="noopener">Open the Call Library in Nooks<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M7 17 17 7M8 7h9v9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></a>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- =================== MODULE 6 — AI TARGET LISTS =================== -->
+  <section class="module" id="m6">
+    <div class="module-head"><span class="module-num">6</span><h2>Using AI to build your target lists</h2></div>
+    <p class="module-sit">This is the payoff — where Nooks stops being a dialer and starts handing you your day. There's one right way to do it in our setup, and one tempting dead end.</p>
+
+    <div class="grid">
+      <div class="card rule">
+        <div class="label"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 2v20M2 12h20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path></svg>The one rule</div>
+        <p class="big">Work from the <em>Accounts page</em>: the signal tells you who's worth working, the AI helps you find the right people there, and you add them to the play that matches the signal. <em>Signal → people → play.</em> That's the loop from the top of this guide, closed.</p>
+      </div>
+
+      <div class="card">
+        <div class="label">The flow</div>
+        <ol class="steps">
+          <li>Open <b>Accounts</b>, filter to a play's <b>signal</b> (e.g. VMware/Broadcom stack).</li>
+          <li>Scan <b>Why Now</b>, open a priority account.</li>
+          <li>In the <b>Prospects tab</b>, review people — use <b>Find more</b> for coverage.</li>
+          <li>Or ask the <b>AI Assistant</b>: "who are the likely decision-makers here?"</li>
+          <li>Select the right people and <b>Add to sequence</b>.</li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <div class="label">Why this beats a static list</div>
+        <ul class="plain">
+          <li>The <b>signal</b> is the "why now" — your opener writes itself.</li>
+          <li>The <b>AI Assistant</b> turns account context into named decision-makers.</li>
+          <li><b>Find more</b> surfaces people who aren't even in Salesforce yet.</li>
+          <li>You stay in control — you pick who enters a sequence, not a black box.</li>
+        </ul>
+      </div>
+
+      <div class="trap">
+        <div class="label"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>The trap — don't chase "Flight Check"</div>
+        <p><strong>Nooks has a separate "AI Prospector / Flight Check" daily-leads feature — it is NOT how our workspace is set up.</strong> That motion is built for Outreach/Salesloft, which we don't use. If you go looking for it, you'll hit a wall and think the AI is broken. <strong>Use the Accounts page.</strong> That's our AI prospecting.</p>
+      </div>
+
+      <div class="links">
+        <a class="btn primary nk" data-link="accounts" href="#" target="_blank" rel="noopener">Open Accounts in Nooks<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M7 17 17 7M8 7h9v9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></a>
+        <a class="btn" href="https://nooks.help.usepylon.com/articles/3861010000-accounts-page" target="_blank" rel="noopener">Learn more: Accounts &amp; AI Assistant</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <footer>
+    <p><strong style="color:var(--ink)">One habit ties all six together:</strong> work the task in Nooks. The call, the email, the research — do them inside the system, and Nooks does the rest: logs to Salesforce, advances the sequence, scores your call, and hands you tomorrow's list.</p>
+    <div class="cfg" id="cfg">
+      <strong>For the admin:</strong> the "Open in Nooks" buttons are wired to our live workspace pages (Dialer, Accounts, Tasks, Call Library). To change any of them, edit the <code>NOOKS_LINKS</code> block at the bottom of this file.
+    </div>
+    <p style="margin-top:1.1rem; color:var(--ink-faint)">In Balance IT Solutions · internal enablement · built for the AE/BDR team</p>
+  </footer>
+
+</main>
+
+<script>
+  /* ============================================================
+     NOOKS LINK CONFIG — edit the values below.
+     Paste the exact URL from your browser's address bar when you
+     are on each page in Nooks. Defaults point to our workspace.
+     ============================================================ */
+  const WORKSPACE_BASE = "https://app2.nooks.in/workspaces/EZxbiX0xkYHuPoMj/";
+  const NOOKS_LINKS = {
+    dialer:   WORKSPACE_BASE + "dialer",
+    accounts: WORKSPACE_BASE + "ai-prospector/accounts",
+    tasks:    WORKSPACE_BASE + "sep/tasks",
+    coaching: WORKSPACE_BASE + "call-library?minDuration=60"
+  };
+
+  /* wire the Open-in-Nooks buttons */
+  document.querySelectorAll('a.nk').forEach(function(a){
+    var key = a.getAttribute('data-link');
+    if (NOOKS_LINKS[key]) a.href = NOOKS_LINKS[key];
+  });
+
+  /* active-section highlight in the top nav */
+  (function(){
+    var links = Array.prototype.slice.call(document.querySelectorAll('#nav a'));
+    var map = {};
+    links.forEach(function(l){ map[l.getAttribute('href').slice(1)] = l; });
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting) {
+          links.forEach(function(l){ l.classList.remove('active'); });
+          if (map[e.target.id]) map[e.target.id].classList.add('active');
+        }
+      });
+    }, { rootMargin: "-45% 0px -50% 0px", threshold: 0 });
+    document.querySelectorAll('section[id]').forEach(function(s){ obs.observe(s); });
+  })();
+
+  /* item 1 — interactive path chooser */
+  (function(){
+    var answers = {
+      list: "Working your list at volume → the <strong>Dialer</strong>. Load your due call tasks and power through. Completing each call advances its sequence.",
+      one:  "Thinking through each person → the <strong>Tasks page</strong> (Start Tasks). One prospect at a time, read them first, then dial. Still completes the task and advances the sequence.",
+      now:  "One specific person right now with no due task → a <strong>one-off dial</strong>. Just remember: a one-off does <em>not</em> advance any sequence they're in."
+    };
+    var box = document.getElementById('ch1');
+    var opts = document.querySelectorAll('.ch-opt');
+    opts.forEach(function(btn){
+      btn.addEventListener('click', function(){
+        opts.forEach(function(b){ b.setAttribute('aria-pressed','false'); });
+        btn.setAttribute('aria-pressed','true');
+        box.classList.remove('empty');
+        box.innerHTML = answers[btn.getAttribute('data-ans')];
+      });
+    });
+  })();
+</script>
+
+
+
+</body></html>
